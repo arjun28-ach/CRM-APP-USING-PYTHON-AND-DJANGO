@@ -1,0 +1,12 @@
+<!-- update_customer.html -->
+
+{% extends "accounts/main.html" %} 
+{% load static %}
+{% block content %}
+  <h2>Create Customer Information</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Update</button>
+  </form>
+{% endblock %}

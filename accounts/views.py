@@ -1,11 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import Http404
 from django.http import HttpResponse
 from django.forms import inlineformset_factory
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import *
-from .forms import OrderForm, CreateUserForm, CustomerForm
+from .forms import OrderForm, CreateUserForm, CustomerForm, ProductForm
 from .filters import OrderFilter
 from .decorators import allowed_users, unauthenticated_user, admin_only
 
@@ -112,20 +113,31 @@ def customer(request, primary_key):
     }
     return render(request, "accounts/customer.html", context)
 
-@login_required(login_url='login')
-@allowed_users(allowed_roles=["admin"])
-def createOrder(request, primary_key):
-    OrderFormSet = inlineformset_factory(Customer, Order, fields=("product", "status"), extra=5)
-    customer = Customer.objects.get(id=primary_key)
-    formset = OrderFormSet(queryset=Order.objects.none(), instance=customer)
-    if request.method == "POST":
-        formset = OrderFormSet(request.POST, instance=customer)
-        if formset.is_valid():
-            formset.save()
-            return redirect("/")
+"""
+def createOrder(request, customer_id):
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            # Process the form data, save the order, etc.
+            # Example: order = form.save(commit=False)
+            #          order.customer_id = customer_id
+            #          order.save()
+            return redirect('customer_detail', customer_id=customer_id)  # Redirect to customer detail page
+    else:
+        form = OrderForm()
+    return render(request, 'create_order.html', {'form': form}) """
 
-    context = {"formset": formset}
-    return render(request, "accounts/order_form.html", context)
+
+def createOrder(request, customer_id):
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            form.instance.customer_id = customer_id  # Set the customer ID before saving
+            form.save()
+            return redirect('customer_detail', customer_id=customer_id)  # Redirect to customer detail page
+    else:
+        form = OrderForm()
+    return render(request, 'accounts/create_order.html', {'form': form})
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=["admin"])
@@ -152,3 +164,55 @@ def deleteOrder(request, primary_key):
     return render(request, "accounts/delete.html", context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=["admin"])  # Adjust the decorator as needed
+def updateCustomer(request, pk):
+    customer = get_object_or_404(Customer, pk=pk)
+    form = CustomerForm(instance=customer)
+    if request.method == 'POST':
+        form = CustomerForm(request.POST, request.FILES, instance=customer)
+        if form.is_valid():
+            form.save()
+            return redirect('customer', primary_key=pk)  # Redirect to the customer detail page
+    context = {'form': form}
+    return render(request, 'accounts/update_customer.html', context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=["admin"])  # Adjust the decorator as needed
+def createCustomer(request):
+    form = CustomerForm(request.POST or None, request.FILES or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            # Redirect to the homepage URL
+            return redirect('home')  
+    context = {'form': form}
+    return render(request, 'accounts/create_customer.html', context)
+
+
+def delete_customer(request, customer_id):
+    customer = get_object_or_404(Customer, id=customer_id)
+    if request.method == 'POST':
+        customer.delete()
+        return redirect('home')  # Assuming 'home' is the name of your homepage URL pattern
+    return render(request, 'accounts/delete_customer.html', {'customer': customer})
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=["admin"])
+def add_product(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('products')  # Assuming 'products' is the URL name for displaying products
+    else:
+        form = ProductForm()
+    return render(request, 'accounts/add_product.html', {'form': form})
+
+
+def delete_product(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    if request.method == 'POST':
+        product.delete()
+    return redirect('products') 

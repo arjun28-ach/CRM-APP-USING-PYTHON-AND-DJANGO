@@ -9,10 +9,22 @@
                 {% csrf_token %}
                 {{ form.management_form }}
                 {% for field in form %}
-                    {{field}}
-                    <hr>
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.help_text %}
+                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% if field.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in field.errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
                 {% endfor %}
-                <input class="btn btn-primary" type="submit" name="Submit">
+                <button class="btn btn-primary" type="submit">Submit</button>
             </form>
         </div>
     </div>

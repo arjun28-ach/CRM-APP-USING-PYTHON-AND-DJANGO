@@ -8,6 +8,7 @@ class Customer(models.Model):
     name = models.CharField(max_length=200, null=True)
     phone = models.CharField(max_length=200, blank=True, null=True)
     email = models.CharField(max_length=200, blank=True, null=True)
+    address = models.CharField(max_length=200, blank=True, null=True)
     profile_pic = models.ImageField(default="placeholder2.png", blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
 
@@ -26,8 +27,10 @@ class Tag(models.Model):
 
 class Product(models.Model):
     CATEGORY = (
-        ("Sports","Sports"),
-        ("Clothing","Clothing"),    
+        ("Ear","Ear"),
+        ("Hand","Hand"), 
+        ("Neck","Neck"), 
+        ("Head","Head"),    
     )
     name = models.CharField(max_length=200, null=True)
     price = models.FloatField(null=True)

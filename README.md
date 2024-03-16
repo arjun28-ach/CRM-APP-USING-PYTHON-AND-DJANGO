@@ -30,13 +30,9 @@ python manage.py runserver
 ## Author
 You can get in touch with me on my LinkedIn Profile:
 
-#### Gulraiz Noor Bari
-[![LinkedIn Link](https://img.shields.io/badge/Connect-gulraiznoorbari-blue.svg?logo=linkedin&longCache=true&style=social&label=Connect
-)](https://www.linkedin.com/in/gulraiznoorbari)
-[![Twitter Link](https://img.shields.io/badge/Connect-gulraiznoorbari-blue.svg?logo=twitter&longCache=true&style=social&label=Follow
-)](https://twitter.com/gulraiznoorbari)
+#### Arjun Acharya
+##https://www.linkedin.com/in/arjun-acharya-935230194/
 
-You can also follow my GitHub Profile to stay updated about my latest projects: [![GitHub Follow](https://img.shields.io/badge/Connect-gulraiznoorbari-blue.svg?logo=Github&longCache=true&style=social&label=Follow)](https://github.com/gulraiznoorbari)
 
 If you liked the repo then kindly support it by giving it a star ⭐!
 

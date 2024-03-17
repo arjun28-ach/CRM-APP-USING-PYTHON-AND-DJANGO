@@ -1,0 +1,57 @@
+{% extends "accounts/main.html" %} 
+
+{% block content %}
+
+<h2>Search Customers by Name</h2> <!-- Added title -->
+
+<br>
+
+<div class="row">
+    <div class="col">
+        <div class="col">
+            <div class="card card-body">
+                <form method="GET">
+                    <div class="form-group">
+                        <label for="search_name">Search by Name:</label>
+                        <input type="text" class="form-control" id="search_name" name="search_name" placeholder="Enter customer name">
+                    </div>
+                    <br>
+                    <button class="btn btn-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+
+<div class="row">
+    <div class="col">
+        <div class="col">
+            <div class="card card-body">
+                <table class="table table-sm">
+                    <tr>
+                        <th></th>
+                        <th>Customer</th>
+                        <th>Orders</th>
+                    </tr>
+                    {% for customer in customers %}
+                        <tr>
+                            <td><a class="btn btn-primary btn-sm" href="{% url 'customer' customer.id %}">View</a></td>
+                            <td>{{ customer.name }}</td>
+                            <td>{{ customer.orders }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="3">No customers found.</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+
+{% endblock %}

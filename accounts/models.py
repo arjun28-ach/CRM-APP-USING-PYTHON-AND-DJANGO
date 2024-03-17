@@ -38,6 +38,7 @@ class Product(models.Model):
     description = models.CharField(max_length=200, null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
     tag = models.ManyToManyField(Tag)
+    img = models.ImageField(default="placeholder2.png", blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -56,3 +57,12 @@ class Order(models.Model):
 
     def __str__(self):
         return self.product.name
+
+
+class StockItem(models.Model):
+    name = models.CharField(max_length=100)
+    weight = models.PositiveIntegerField()  # Weight in grams
+    quantity = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.name

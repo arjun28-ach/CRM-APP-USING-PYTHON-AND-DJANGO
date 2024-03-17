@@ -21,6 +21,10 @@ urlpatterns = [
     path('delete_customer/<int:customer_id>/', views.delete_customer, name='delete_customer'),
     path('add_product/', views.add_product, name='add_product'),
     path('delete_product/<int:product_id>/', views.delete_product, name='delete_product'),
+    path('calculator/', views.calculatorPage, name="calculator"), 
+    path('search_customer/', views.search_customer, name='search_customer'),
+    path('search_product/', views.search_product, name='search_product'),
+    path('my_stock/', views.my_stock, name='my_stock'),
     path(
         'reset_password/', 
         auth_views.PasswordResetView.as_view(template_name="accounts/password_reset.html"), 

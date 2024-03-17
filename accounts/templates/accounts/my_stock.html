@@ -1,0 +1,45 @@
+
+
+
+{% extends 'accounts/main.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <h1>My Stock</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Add New Item</button>
+        </form>
+    </div>
+    <div class="col-md-6">
+        {% if stock_items %}
+        <h2>Stock Items</h2>
+        <ul class="list-group">
+            {% for item in stock_items %}
+            <li class="list-group-item">
+                {{ item.name }} - Weight: {{ item.weight }} grams - Quantity: {{ item.quantity }}
+                <form method="post" style="display: inline;">
+                    <br>
+                    <br>
+                    {% csrf_token %}
+                    <button type="submit" name="increase_item" value="{{ item.pk }}" class="btn btn-success">Increase Item</button>
+                </form>
+                <form method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" name="decrease_item" value="{{ item.pk }}" class="btn btn-warning">Decrease Item</button>
+                </form>
+                <form method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" name="delete_item" value="{{ item.pk }}" class="btn btn-danger">Delete Item</button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No stock items available.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

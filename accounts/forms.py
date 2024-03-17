@@ -2,7 +2,7 @@ from django.db.models import fields
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Customer, Order, Product
+from .models import Customer, Order, Product, StockItem
 
 class CustomerForm(ModelForm):
     class Meta:
@@ -24,5 +24,12 @@ class CreateUserForm(UserCreationForm):
 class ProductForm(ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'price', 'category', 'description', 'tag']
+        fields = ['name', 'price', 'category', 'description', 'tag', 'img']
 
+
+class StockItemForm(ModelForm):
+    class Meta:
+        model = StockItem
+        fields = ['name', 'weight', 'quantity']
+
+        

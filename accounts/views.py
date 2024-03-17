@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import *
-from .forms import OrderForm, CreateUserForm, CustomerForm, ProductForm
+from .forms import OrderForm, CreateUserForm, CustomerForm, ProductForm, StockItemForm
 from .filters import OrderFilter
 from .decorators import allowed_users, unauthenticated_user, admin_only
 
@@ -202,7 +202,7 @@ def delete_customer(request, customer_id):
 @allowed_users(allowed_roles=["admin"])
 def add_product(request):
     if request.method == 'POST':
-        form = ProductForm(request.POST)
+        form = ProductForm(request.POST, request.FILES)  # Include request.FILES for handling file uploads
         if form.is_valid():
             form.save()
             return redirect('products')  # Assuming 'products' is the URL name for displaying products
@@ -216,3 +216,71 @@ def delete_product(request, product_id):
     if request.method == 'POST':
         product.delete()
     return redirect('products') 
+
+def calculatorPage(request):
+    return render(request, 'accounts/calculator.html')
+
+
+def search_customer(request):
+    query = request.GET.get('search_name')
+    if query:
+        customers = Customer.objects.filter(name__icontains=query)
+    else:
+        customers = Customer.objects.all()
+    return render(request, 'accounts/customer_search_results.html', {'customers': customers})
+
+
+def search_product(request):
+    query = request.GET.get('search_name')
+    if query:
+        products = Product.objects.filter(name__icontains=query)
+    else:
+        products = Product.objects.all()
+    return render(request, 'accounts/search_product.html', {'products': products})
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import StockItem
+from .forms import StockItemForm
+
+def my_stock(request):
+    # If the request method is POST, process the form data or handle button actions
+    if request.method == 'POST':
+        form = StockItemForm(request.POST)
+        if form.is_valid():
+            form.save()
+            # Redirect to the same URL to prevent form resubmission
+            return redirect('my_stock')
+        else:
+            # Check if the increase item button is clicked
+            if 'increase_item' in request.POST:
+                item_id = request.POST.get('increase_item')
+                stock_item = get_object_or_404(StockItem, pk=item_id)
+                stock_item.quantity += 1
+                stock_item.save()
+            # Check if the decrease item button is clicked
+            elif 'decrease_item' in request.POST:
+                item_id = request.POST.get('decrease_item')
+                stock_item = get_object_or_404(StockItem, pk=item_id)
+                # Ensure quantity doesn't go below zero
+                if stock_item.quantity > 0:
+                    stock_item.quantity -= 1
+                    stock_item.save()
+            # Check if the delete item button is clicked
+            elif 'delete_item' in request.POST:
+                item_id = request.POST.get('delete_item')
+                stock_item = get_object_or_404(StockItem, pk=item_id)
+                stock_item.delete()
+    else:
+        # If the request method is GET, render the form
+        form = StockItemForm()
+    
+    # Query all stock items from the database
+    stock_items = StockItem.objects.all()
+    
+    # Pass the form instance and stock items to the template context
+    return render(request, 'accounts/my_stock.html', {'form': form, 'stock_items': stock_items})
+
+    
+

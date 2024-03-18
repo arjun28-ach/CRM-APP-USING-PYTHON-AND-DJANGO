@@ -12,13 +12,14 @@
                 <h5>Products</h5>
             </div>
             <div class="card card-body">
-                <table class="table">
+                <div class="table-responsive">
+                    <table class="table table-fixed">
                     <tr>
-                        <th>Product</th>
-                        <th>Category</th>
-                        <th>Weight(gram)</th>
-                        <th>Action</th> <!-- Add this column for delete action -->
-                        <th>Image</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Weight(gram)</th>
+                        <th scope="col">Action</th> <!-- Add this column for delete action -->
+                        <th scope="col">Image</th>
                     </tr>
                     {% for product in products %}
                     <tr>
@@ -40,14 +41,16 @@
                         </td>
                     </tr>
                     {% endfor %}
-                </table>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
 <br>
+
 <div class="row fixed-bottom">
-    <div class="col">
+    <div class="col" style="padding-bottom: 10px;">
         <a class="btn btn-primary" href="{% url 'add_product' %}">Add Product</a>
         <a class="btn btn-success" href="{% url 'search_product' %}">Search Product</a>
     </div>

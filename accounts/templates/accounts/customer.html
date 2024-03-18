@@ -26,32 +26,28 @@
         }
     </style>
     
+<div class="card mb-3" style="max-width: 540px;">
+    <div class="row no-gutters">
 
-    <div class="col-md">
-        <div class="card card-body">
-            <h5><strong>Contact Information </strong></h5>
-            <hr>
-            <div class="row">
-                <div class="col-md-6">
+            <div class="col-md-4">
                     {% if customer.profile_pic and customer.profile_pic.url %}
-                        <img src="{{ customer.profile_pic.url }}" alt="Profile Photo" class="profile-pic">
+                        <img src="{{ customer.profile_pic.url }}" alt="Profile Photo" class="card-img" >
                     {% else %}
                         <p style="color: gray;">No profile photo available</p>
                     {% endif %}
-                </div>
-                <div class="col-md-6">
-                    
+            </div>
+    
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title"><strong>Contact Information </strong></h5>
                     <p><b>Name:</b> {{ customer.name }}</p>
                     <p><b>Email:</b> {{ customer.email }}</p>
                     <p><b>Phone:</b> {{ customer.phone }}</p>
-                    <p><b>Address:</b> {{ customer.address }}</p>
-                    
+                    <p><b>Address:</b> {{ customer.address }}</p>    
                 </div>
             </div>
-        </div>
-    </div>
-    
-    
+    </div>   
+</div>
 
     <div class="col">
         <div class="col-md">
@@ -84,6 +80,7 @@
     <div class="col">
         <div class="col-md">
             <div class="card card-body">
+                <div class="table-responsive">
                 <table class="table table-sm">
                     <tr>
                         <th>Product</th>
@@ -106,6 +103,7 @@
                         </tr>
                     {% endfor %}
                 </table>
+                </div>
             </div>
         </div>
     </div>

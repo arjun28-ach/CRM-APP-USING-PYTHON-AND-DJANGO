@@ -25,7 +25,7 @@ class CreateUserForm(UserCreationForm):
 class ProductForm(ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'price', 'category', 'description', 'tag', 'img']
+        fields = ['name', 'weight', 'category', 'description', 'tag', 'img']
 
 
 class StockItemForm(ModelForm):

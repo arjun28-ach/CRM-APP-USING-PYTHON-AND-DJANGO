@@ -19,7 +19,7 @@
         <ul class="list-group">
             {% for item in stock_items %}
             <li class="list-group-item">
-                {{ item.name }} - Weight: {{ item.weight }} grams - Quantity: {{ item.quantity }}
+                <strong><mark>{{ item.name }}</mark></strong> - Weight: {{ item.weight }} grams - <strong> Quantity: {{ item.quantity }}</strong>
                 <form method="post" style="display: inline;">
                     <br>
                     <br>

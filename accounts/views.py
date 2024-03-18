@@ -113,27 +113,16 @@ def customer(request, primary_key):
     }
     return render(request, "accounts/customer.html", context)
 
-"""
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=["admin"])
 def createOrder(request, customer_id):
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
-            # Process the form data, save the order, etc.
-            # Example: order = form.save(commit=False)
-            #          order.customer_id = customer_id
-            #          order.save()
-            return redirect('customer_detail', customer_id=customer_id)  # Redirect to customer detail page
-    else:
-        form = OrderForm()
-    return render(request, 'create_order.html', {'form': form}) """
-
-
-def createOrder(request, customer_id):
-    if request.method == 'POST':
-        form = OrderForm(request.POST)
-        if form.is_valid():
-            form.instance.customer_id = customer_id  # Set the customer ID before saving
-            form.save()
+            order = form.save(commit=False)
+            order.customer_id = customer_id  # Set the customer ID from URL parameter
+            order.save()
             return redirect('customer_detail', customer_id=customer_id)  # Redirect to customer detail page
     else:
         form = OrderForm()
@@ -142,16 +131,17 @@ def createOrder(request, customer_id):
 @login_required(login_url='login')
 @allowed_users(allowed_roles=["admin"])
 def updateOrder(request, primary_key):
-    order = Order.objects.get(id=primary_key)
+    order = get_object_or_404(Order, id=primary_key)
     form = OrderForm(instance=order)
     if request.method == "POST":
         form = OrderForm(request.POST, instance=order)
         if form.is_valid():
             form.save()
-            return redirect('/customer/' + str(order.customer.id))
+            return redirect('customer_detail', customer_id=order.customer.id)
 
     context = {"form": form}
     return render(request, "accounts/order_form.html", context)
+
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=["admin"])
@@ -189,7 +179,8 @@ def createCustomer(request):
     context = {'form': form}
     return render(request, 'accounts/create_customer.html', context)
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=["admin"])
 def delete_customer(request, customer_id):
     customer = get_object_or_404(Customer, id=customer_id)
     if request.method == 'POST':
@@ -210,17 +201,24 @@ def add_product(request):
         form = ProductForm()
     return render(request, 'accounts/add_product.html', {'form': form})
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=["admin"])
 def delete_product(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     if request.method == 'POST':
         product.delete()
     return redirect('products') 
 
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=["admin"])
 def calculatorPage(request):
     return render(request, 'accounts/calculator.html')
 
 
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=["admin"])
 def search_customer(request):
     query = request.GET.get('search_name')
     if query:
@@ -229,7 +227,8 @@ def search_customer(request):
         customers = Customer.objects.all()
     return render(request, 'accounts/customer_search_results.html', {'customers': customers})
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=["admin"])
 def search_product(request):
     query = request.GET.get('search_name')
     if query:
@@ -244,6 +243,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import StockItem
 from .forms import StockItemForm
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=["admin"])
 def my_stock(request):
     # If the request method is POST, process the form data or handle button actions
     if request.method == 'POST':

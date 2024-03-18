@@ -68,8 +68,14 @@
         var mass = parseFloat(document.getElementById('mass').value);
         var volume = parseFloat(document.getElementById('volume').value);
         var density = mass / volume;
-        var pureGoldDensity = 19.32; // Density of pure gold in g/cm³
-        var purityPercentage = (density / pureGoldDensity) * 100;
+        var minDensity = 10.5;
+        var maxDensity = 19.3;
+        
+        // Map the density to the new range
+        var mappedDensity = (density - minDensity) / (maxDensity - minDensity);
+
+        // Calculate purity percentage based on the mapped density
+        var purityPercentage = mappedDensity * 100;
 
         
         if (purityPercentage > 100) {

@@ -14,6 +14,7 @@ class OrderForm(ModelForm):
     class Meta:
         model = Order
         fields = '__all__'
+        exclude = ['customer']
 
 class CreateUserForm(UserCreationForm):
     class Meta:
